@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO meta tags -->
+    <title>ErikCoding - Freelance Web Developer | Strony Internetowe dla Małych Firm</title>
+    <meta name="description" content="ErikCoding - Młody freelancer tworzący nowoczesne strony internetowe i wizytówki dla małych firm. Profesjonalne usługi web developmentu w przystępnych cenach.">
+    <meta name="keywords" content="web developer, freelancer, strony internetowe, wizytówki, małe firmy, HTML, CSS, JavaScript, React">
+    <meta name="author" content="ErikCoding">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://erikcoding.pl/">
+    <meta property="og:title" content="ErikCoding - Freelance Web Developer">
+    <meta property="og:description" content="Młody freelancer tworzący nowoczesne strony internetowe dla małych firm. Profesjonalne usługi web developmentu.">
+    <meta property="og:image" content="https://erikcoding.pl/og-image.jpg">
+    <meta property="og:locale" content="pl_PL">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://erikcoding.pl/">
+    <meta property="twitter:title" content="ErikCoding - Freelance Web Developer">
+    <meta property="twitter:description" content="Młody freelancer tworzący nowoczesne strony internetowe dla małych firm.">
+    <meta property="twitter:image" content="https://erikcoding.pl/og-image.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://erikcoding.pl/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "ErikCoding",
+      "jobTitle": "Freelance Web Developer",
+      "description": "Młody freelancer specjalizujący się w tworzeniu stron internetowych i wizytówek dla małych firm.",
+      "url": "https://erikcoding.pl",
+      "email": "kontakt@erikcoding.pl",
+      "telephone": "+48 123 456 789",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "PL"
+      },
+      "sameAs": [
+        "https://instagram.com/erikcoding",
+        "https://github.com/erikcoding"
+      ],
+      "knowsAbout": ["Web Development", "HTML", "CSS", "JavaScript", "React", "Responsive Design"],
+      "serviceArea": {
+        "@type": "Country",
+        "name": "Poland"
+      }
+    }
+    </script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Firebase configuration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, push, set, get, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        
+        // Firebase configuration
+        const firebaseConfig = {
+  apiKey: "AIzaSyAuzwRm7qLQf9xwkAOiUlXJsqu7BP7a9Ao",
+  authDomain: "portfolio-ec-e3eed.firebaseapp.com",
+  databaseURL: "https://portfolio-ec-e3eed-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "portfolio-ec-e3eed",
+  storageBucket: "portfolio-ec-e3eed.firebasestorage.app",
+  messagingSenderId: "581584748923",
+  appId: "1:581584748923:web:34abb8daa91f3f09ebbdde"
+};
+        
+        window.firebaseInitialized = false;
+        window.firebaseError = null;
+        
+        try {
+            console.log("[v0] Inicjalizacja Firebase Realtime Database...");
+            
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            
+            window.firebaseApp = app;
+            window.firebaseDb = database;
+            window.firebaseRef = ref;
+            window.firebasePush = push;
+            window.firebaseSet = set;
+            window.firebaseGet = get;
+            window.firebaseRemove = remove;
+            
+            window.firebaseInitialized = true;
+            console.log("[v0] Firebase Realtime Database zainicjalizowany pomyślnie!");
+            
+            window.dispatchEvent(new CustomEvent('firebaseReady'));
+            
+        } catch (error) {
+            console.error("[v0] Błąd inicjalizacji Firebase:", error);
+            window.firebaseError = error;
+        }
+    </script>
+</head>
+<body class="font-sans bg-gray-900 text-white">
+    <!-- Changed from light theme to dark theme -->
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg text-center border border-gray-700">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400 mx-auto mb-4"></div>
+            <p class="text-white">Ładowanie...</p>
+        </div>
+    </div>
+
+    <!-- Language switcher -->
+    <div class="language-switcher animate-float">
+        <div class="flex gap-2">
+            <button onclick="switchLanguage('pl')" id="lang-pl" class="px-3 py-1 bg-cyan-500 text-black rounded-md text-sm font-medium transition-colors hover:bg-cyan-400">PL</button>
+            <button onclick="switchLanguage('en')" id="lang-en" class="px-3 py-1 bg-gray-700 text-gray-300 rounded-md text-sm font-medium transition-colors hover:bg-gray-600">EN</button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-black backdrop-blur-sm shadow-lg z-50 border-b border-gray-800">
+        <!-- Changed navigation background from gray-900/95 to pure black -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ErikCoding-LOGO-Black%26White%20copy-XBVsKF8qubj4Qapmy5dsNCSir3FWgq.png" alt="ErikCoding Logo" class="h-8 w-auto sm:h-10 md:h-12 filter invert">
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-white hover:text-gray-300 transition-colors relative nav-link" data-pl="Strona Główna" data-en="Home">Strona Główna</a>
+                    <a href="#about" class="text-white hover:text-gray-300 transition-colors relative nav-link" data-pl="O Mnie" data-en="About">O Mnie</a>
+                    <a href="#projects" class="text-white hover:text-gray-300 transition-colors relative nav-link" data-pl="Projekty" data-en="Projects">Projekty</a>
+                    <a href="#services" class="text-white hover:text-gray-300 transition-colors relative nav-link" data-pl="Usługi" data-en="Services">Usługi</a>
+                    <a href="#contact" class="text-white hover:text-gray-300 transition-colors relative nav-link" data-pl="Kontakt" data-en="Contact">Kontakt</a>
+                    <!-- Changed hover color from cyan-400 to gray-300 for more serious look -->
+                </div>
+                <button class="md:hidden" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-white"></i>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-black border-t border-gray-800">
+            <!-- Changed mobile menu background to black -->
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#home" class="block px-3 py-2 text-white hover:text-gray-300 transition-colors" data-pl="Strona Główna" data-en="Home">Strona Główna</a>
+                <a href="#about" class="block px-3 py-2 text-white hover:text-gray-300 transition-colors" data-pl="O Mnie" data-en="About">O Mnie</a>
+                <a href="#projects" class="block px-3 py-2 text-white hover:text-gray-300 transition-colors" data-pl="Projekty" data-en="Projects">Projekty</a>
+                <a href="#services" class="block px-3 py-2 text-white hover:text-gray-300 transition-colors" data-pl="Usługi" data-en="Services">Usługi</a>
+                <a href="#contact" class="block px-3 py-2 text-white hover:text-gray-300 transition-colors" data-pl="Kontakt" data-en="Contact">Kontakt</a>
+                <!-- Changed all mobile menu hover colors to gray-300 -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden">
+        <!-- Changed gradient to more serious black/gray tones -->
+        <div class="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center opacity-10"></div>
+        <!-- Reduced background image opacity from 20 to 10 for subtlety -->
+        <!-- Animated particles background -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute w-1 h-1 bg-white rounded-full animate-pulse opacity-60" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+            <div class="absolute w-1 h-1 bg-gray-400 rounded-full animate-pulse opacity-40" style="top: 60%; left: 80%; animation-delay: 1s;"></div>
+            <div class="absolute w-2 h-2 bg-white rounded-full animate-pulse opacity-50" style="top: 30%; left: 70%; animation-delay: 2s;"></div>
+            <div class="absolute w-1 h-1 bg-gray-300 rounded-full animate-pulse opacity-30" style="top: 80%; left: 20%; animation-delay: 3s;"></div>
+            <!-- Changed colorful particles to white/gray for serious professional look -->
+        </div>
+        <div class="text-center max-w-4xl mx-auto px-4 animate-fade-in relative z-10">
+            <h1 class="font-serif text-5xl md:text-7xl font-bold mb-6 animate-bounce-in text-balance text-white" data-pl="Tworzę Strony Internetowe dla Małych Firm" data-en="I Create Websites for Small Businesses">
+                Tworzę Strony Internetowe dla Małych Firm
+                <!-- Removed gradient text effect, using clean white text -->
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 font-light animate-slide-up text-gray-300 text-pretty" data-pl="Młody freelancer z pasją do web developmentu. Pomagam małym firmom zaistnieć w internecie dzięki nowoczesnym i funkcjonalnym stronom internetowym." data-en="Young freelancer with a passion for web development. I help small businesses establish their online presence with modern and functional websites.">
+                Młody freelancer z pasją do web developmentu. Pomagam małym firmom zaistnieć w internecie dzięki nowoczesnym i funkcjonalnym stronom internetowym.
+            </p>
+            <div class="space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center animate-scale-in">
+                <!-- Changed buttons to monochrome professional design -->
+                <a href="#projects" class="inline-block bg-white hover:bg-gray-200 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg" data-pl="Zobacz Moje Projekty" data-en="View My Projects">
+                    Zobacz Moje Projekty
+                </a>
+                <a href="#contact" class="inline-block border-2 border-white hover:bg-white hover:text-black text-white font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg" data-pl="Skontaktuj się" data-en="Get in Touch">
+                    Skontaktuj się
+                </a>
+            </div>
+        </div>
+    </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 bg-gray-900 section-reveal">
+            <!-- Changed from bg-gray-800 to bg-gray-900 to match hero section depth -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="animate-slide-in-left">
+                        <h2 class="font-serif text-4xl font-bold text-white mb-6" data-pl="Cześć! Jestem Erik" data-en="Hi! I'm Erik">
+                            Cześć! Jestem Erik
+                            <!-- Changed heading color from cyan-400 to white -->
+                        </h2>
+                        <div class="space-y-4 text-lg leading-relaxed text-gray-300">
+                            <p data-pl="Jestem młodym, ambitnym web developerem, który dopiero zaczyna swoją przygodę z freelancingiem. Specjalizuję się w tworzeniu nowoczesnych, responsywnych stron internetowych dla małych firm i przedsiębiorców." data-en="I'm a young, ambitious web developer who is just starting his freelancing journey. I specialize in creating modern, responsive websites for small businesses and entrepreneurs.">
+                                Jestem młodym, ambitnym web developerem, który dopiero zaczyna swoją przygodę z freelancingiem. Specjalizuję się w tworzeniu nowoczesnych, responsywnych stron internetowych dla małych firm i przedsiębiorców.
+                            </p>
+                            <p data-pl="Choć jestem na początku drogi, moja pasja do programowania i chęć ciągłego uczenia się pozwalają mi tworzyć wysokiej jakości rozwiązania. Wierzę, że każda firma, niezależnie od wielkości, zasługuje na profesjonalną obecność w internecie." data-en="Although I'm at the beginning of my journey, my passion for programming and desire to constantly learn allow me to create high-quality solutions. I believe that every company, regardless of size, deserves a professional online presence.">
+                                Choć jestem na początku drogi, moja pasja do programowania i chęć ciągłego uczenia się pozwalają mi tworzyć wysokiej jakości rozwiązania. Wierzę, że każda firma, niezależnie od wielkości, zasługuje na profesjonalną obecność w internecie.
+                            </p>
+                            <p data-pl="Oferuję przystępne ceny i indywidualne podejście do każdego projektu. Mój cel to nie tylko stworzenie pięknej strony, ale także zapewnienie, że będzie ona skutecznie wspierać rozwój Twojego biznesu." data-en="I offer affordable prices and an individual approach to each project. My goal is not only to create a beautiful website, but also to ensure that it will effectively support the growth of your business.">
+                                Oferuję przystępne ceny i indywidualne podejście do każdego projektu. Mój cel to nie tylko stworzenie pięknej strony, ale także zapewnienie, że będzie ona skutecznie wspierać rozwój Twojego biznesu.
+                            </p>
+                        </div>
+                        <div class="mt-8 flex flex-wrap gap-4">
+                            <span class="px-4 py-2 bg-gray-800 text-white rounded-full text-sm font-medium border border-gray-600">HTML5</span>
+                            <span class="px-4 py-2 bg-gray-800 text-white rounded-full text-sm font-medium border border-gray-600">CSS3</span>
+                            <span class="px-4 py-2 bg-gray-800 text-white rounded-full text-sm font-medium border border-gray-600">JavaScript</span>
+                            <span class="px-4 py-2 bg-gray-800 text-white rounded-full text-sm font-medium border border-gray-600">React</span>
+                            <span class="px-4 py-2 bg-gray-800 text-white rounded-full text-sm font-medium border border-gray-600">Responsive Design</span>
+                            <!-- Changed skill badges to monochrome gray design -->
+                        </div>
+                    </div>
+                    <div class="animate-slide-in-right">
+                        <img src="/placeholder.svg?height=500&width=400" alt="Erik pracujący nad projektem" class="rounded-lg shadow-lg w-full border border-gray-700">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 bg-black section-reveal">
+            <!-- Changed from bg-gray-900 to bg-black to match hero section depth -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <header class="text-center mb-16 animate-slide-up">
+                    <h2 class="font-serif text-4xl font-bold text-white mb-4" data-pl="Moje Projekty" data-en="My Projects">
+                        Moje Projekty
+                        <!-- Changed heading color from cyan-400 to white -->
+                    </h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto" data-pl="Oto kilka przykładów stron internetowych, które stworzyłem dla moich klientów. Każdy projekt to unikalne rozwiązanie dostosowane do potrzeb konkretnej firmy." data-en="Here are some examples of websites I've created for my clients. Each project is a unique solution tailored to the specific needs of the company.">
+                        Oto kilka przykładów stron internetowych, które stworzyłem dla moich klientów. Każdy projekt to unikalne rozwiązanie dostosowane do potrzeb konkretnej firmy.
+                    </p>
+                </header>
+                
+                <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Updated project cards to dark theme with gradient borders -->
+                    <article class="project-card bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 opacity-60 hover:opacity-80 transition-opacity">
+                        <div class="w-full h-48 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-plus text-4xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-400 font-medium" data-pl="Nowy Projekt" data-en="New Project">Nowy Projekt</p>
+                                <!-- Changed plus icon color from cyan-400 to gray-400 -->
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-serif text-xl font-bold text-gray-400 mb-2" data-pl="Projekt w przygotowaniu" data-en="Project in preparation">Projekt w przygotowaniu</h3>
+                            <p class="text-gray-500 mb-4" data-pl="Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!" data-en="A new project will appear here soon. Follow my portfolio to stay updated!">
+                                Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-gray-700 text-gray-400 text-xs rounded">TBD</span>
+                            </div>
+                            <span class="inline-flex items-center text-gray-400 font-medium cursor-not-allowed">
+                                <span data-pl="Wkrótce dostępne" data-en="Coming soon">Wkrótce dostępne</span>
+                                <i class="fas fa-clock ml-2"></i>
+                            </span>
+                        </div>
+                    </article>
+
+                    <article class="project-card bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 opacity-60 hover:opacity-80 transition-opacity">
+                        <div class="w-full h-48 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-plus text-4xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-400 font-medium" data-pl="Nowy Projekt" data-en="New Project">Nowy Projekt</p>
+                                <!-- Changed plus icon color from cyan-400 to gray-400 -->
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-serif text-xl font-bold text-gray-400 mb-2" data-pl="Projekt w przygotowaniu" data-en="Project in preparation">Projekt w przygotowaniu</h3>
+                            <p class="text-gray-500 mb-4" data-pl="Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!" data-en="A new project will appear here soon. Follow my portfolio to stay updated!">
+                                Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-gray-700 text-gray-400 text-xs rounded">TBD</span>
+                            </div>
+                            <span class="inline-flex items-center text-gray-400 font-medium cursor-not-allowed">
+                                <span data-pl="Wkrótce dostępne" data-en="Coming soon">Wkrótce dostępne</span>
+                                <i class="fas fa-clock ml-2"></i>
+                            </span>
+                        </div>
+                    </article>
+
+                    <article class="project-card bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 opacity-60 hover:opacity-80 transition-opacity">
+                        <div class="w-full h-48 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-plus text-4xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-400 font-medium" data-pl="Nowy Projekt" data-en="New Project">Nowy Projekt</p>
+                                <!-- Changed plus icon color from cyan-400 to gray-400 -->
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-serif text-xl font-bold text-gray-400 mb-2" data-pl="Projekt w przygotowaniu" data-en="Project in preparation">Projekt w przygotowaniu</h3>
+                            <p class="text-gray-500 mb-4" data-pl="Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!" data-en="A new project will appear here soon. Follow my portfolio to stay updated!">
+                                Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-gray-700 text-gray-400 text-xs rounded">TBD</span>
+                            </div>
+                            <span class="inline-flex items-center text-gray-400 font-medium cursor-not-allowed">
+                                <span data-pl="Wkrótce dostępne" data-en="Coming soon">Wkrótce dostępne</span>
+                                <i class="fas fa-clock ml-2"></i>
+                            </span>
+                        </div>
+                    </article>
+
+                    <article class="project-card bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 opacity-60 hover:opacity-80 transition-opacity">
+                        <div class="w-full h-48 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-plus text-4xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-400 font-medium" data-pl="Nowy Projekt" data-en="New Project">Nowy Projekt</p>
+                                <!-- Changed plus icon color from cyan-400 to gray-400 -->
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-serif text-xl font-bold text-gray-400 mb-2" data-pl="Projekt w przygotowaniu" data-en="Project in preparation">Projekt w przygotowaniu</h3>
+                            <p class="text-gray-500 mb-4" data-pl="Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!" data-en="A new project will appear here soon. Follow my portfolio to stay updated!">
+                                Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-gray-700 text-gray-400 text-xs rounded">TBD</span>
+                            </div>
+                            <span class="inline-flex items-center text-gray-400 font-medium cursor-not-allowed">
+                                <span data-pl="Wkrótce dostępne" data-en="Coming soon">Wkrótce dostępne</span>
+                                <i class="fas fa-clock ml-2"></i>
+                            </span>
+                        </div>
+                    </article>
+
+                    <article class="project-card bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 opacity-60 hover:opacity-80 transition-opacity">
+                        <div class="w-full h-48 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-plus text-4xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-400 font-medium" data-pl="Nowy Projekt" data-en="New Project">Nowy Projekt</p>
+                                <!-- Changed plus icon color from cyan-400 to gray-400 -->
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-serif text-xl font-bold text-gray-400 mb-2" data-pl="Projekt w przygotowaniu" data-en="Project in preparation">Projekt w przygotowaniu</h3>
+                            <p class="text-gray-500 mb-4" data-pl="Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!" data-en="A new project will appear here soon. Follow my portfolio to stay updated!">
+                                Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-gray-700 text-gray-400 text-xs rounded">TBD</span>
+                            </div>
+                            <span class="inline-flex items-center text-gray-400 font-medium cursor-not-allowed">
+                                <span data-pl="Wkrótce dostępne" data-en="Coming soon">Wkrótce dostępne</span>
+                                <i class="fas fa-clock ml-2"></i>
+                            </span>
+                        </div>
+                    </article>
+
+                    <article class="project-card bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 opacity-60 hover:opacity-80 transition-opacity">
+                        <div class="w-full h-48 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-plus text-4xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-400 font-medium" data-pl="Nowy Projekt" data-en="New Project">Nowy Projekt</p>
+                                <!-- Changed plus icon color from cyan-400 to gray-400 -->
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-serif text-xl font-bold text-gray-400 mb-2" data-pl="Projekt w przygotowaniu" data-en="Project in preparation">Projekt w przygotowaniu</h3>
+                            <p class="text-gray-500 mb-4" data-pl="Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!" data-en="A new project will appear here soon. Follow my portfolio to stay updated!">
+                                Wkrótce tutaj pojawi się nowy projekt. Śledź moje portfolio, aby być na bieżąco!
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-gray-700 text-gray-400 text-xs rounded">TBD</span>
+                            </div>
+                            <span class="inline-flex items-center text-gray-400 font-medium cursor-not-allowed">
+                                <span data-pl="Wkrótce dostępne" data-en="Coming soon">Wkrótce dostępne</span>
+                                <i class="fas fa-clock ml-2"></i>
+                            </span>
+                        </div>
+                    </article>
+                </div>
+                
+                <div id="no-projects" class="hidden text-center py-16">
+                    <i class="fas fa-code text-6xl text-gray-400 mb-4"></i>
+                    <h3 class="text-2xl font-semibold text-white mb-2" data-pl="Wkrótce więcej projektów!" data-en="More projects coming soon!">
+                        Wkrótce więcej projektów!
+                    </h3>
+                    <p class="text-gray-300" data-pl="Pracuję nad nowymi projektami, które wkrótce będą dostępne w portfolio." data-en="I'm working on new projects that will be available in the portfolio soon.">
+                        Pracuję nad nowymi projektami, które wkrótce będą dostępne w portfolio.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-20 bg-gray-900 section-reveal">
+            <!-- Changed from bg-gray-800 to bg-gray-900 to match hero section depth -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <header class="text-center mb-16 animate-slide-up">
+                    <h2 class="font-serif text-4xl font-bold text-white mb-4" data-pl="Moje Usługi" data-en="My Services">
+                        Moje Usługi
+                        <!-- Changed heading color from cyan-400 to white -->
+                    </h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto" data-pl="Oferuję kompleksowe usługi web developmentu dostosowane do potrzeb małych firm i przedsiębiorców." data-en="I offer comprehensive web development services tailored to the needs of small businesses and entrepreneurs.">
+                        Oferuję kompleksowe usługi web developmentu dostosowane do potrzeb małych firm i przedsiębiorców.
+                    </p>
+                </header>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <article class="service-card bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-lg shadow-lg border border-gray-700 hover:border-gray-500 transition-all">
+                        <div class="text-white text-4xl mb-4">
+                            <i class="fas fa-laptop-code"></i>
+                            <!-- Changed service icons from cyan-400 to white -->
+                        </div>
+                        <h3 class="font-serif text-xl font-bold mb-4 text-white" data-pl="Strony Wizytówkowe" data-en="Business Card Websites">Strony Wizytówkowe</h3>
+                        <p class="text-gray-300 mb-4" data-pl="Profesjonalne strony wizytówkowe dla małych firm. Responsywne, szybkie i zoptymalizowane pod SEO." data-en="Professional business card websites for small companies. Responsive, fast and SEO optimized.">
+                            Profesjonalne strony wizytówkowe dla małych firm. Responsywne, szybkie i zoptymalizowane pod SEO.
+                        </p>
+                        <div class="text-white font-semibold" data-pl="Od 800 zł" data-en="From 800 PLN">Od 800 zł</div>
+                        <!-- Changed price color from cyan-400 to white -->
+                    </article>
+                    
+                    <article class="service-card bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-lg shadow-lg border border-gray-700 hover:border-gray-500 transition-all">
+                        <div class="text-white text-4xl mb-4">
+                            <i class="fas fa-store"></i>
+                            <!-- Changed service icons from cyan-400 to white -->
+                        </div>
+                        <h3 class="font-serif text-xl font-bold mb-4 text-white" data-pl="Sklepy Online" data-en="Online Stores">Sklepy Online</h3>
+                        <p class="text-gray-300 mb-4" data-pl="Funkcjonalne sklepy internetowe z systemem płatności i zarządzaniem produktami." data-en="Functional online stores with payment system and product management.">
+                            Funkcjonalne sklepy internetowe z systemem płatności i zarządzaniem produktami.
+                        </p>
+                        <div class="text-white font-semibold" data-pl="Od 2000 zł" data-en="From 2000 PLN">Od 2000 zł</div>
+                        <!-- Changed price color from cyan-400 to white -->
+                    </article>
+                    
+                    <article class="service-card bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-lg shadow-lg border border-gray-700 hover:border-gray-500 transition-all">
+                        <div class="text-white text-4xl mb-4">
+                            <i class="fas fa-mobile-alt"></i>
+                            <!-- Changed service icons from cyan-400 to white -->
+                        </div>
+                        <h3 class="font-serif text-xl font-bold mb-4 text-white" data-pl="Responsywny Design" data-en="Responsive Design">Responsywny Design</h3>
+                        <p class="text-gray-300 mb-4" data-pl="Wszystkie strony są w pełni responsywne i działają idealnie na wszystkich urządzeniach." data-en="All websites are fully responsive and work perfectly on all devices.">
+                            Wszystkie strony są w pełni responsywne i działają idealnie na wszystkich urządzeniach.
+                        </p>
+                        <div class="text-white font-semibold" data-pl="Zawsze w cenie" data-en="Always included">Zawsze w cenie</div>
+                        <!-- Changed price color from cyan-400 to white -->
+                    </article>
+                    
+                    <article class="service-card bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-lg shadow-lg border border-gray-700 hover:border-gray-500 transition-all">
+                        <div class="text-white text-4xl mb-4">
+                            <i class="fas fa-search"></i>
+                            <!-- Changed service icons from cyan-400 to white -->
+                        </div>
+                        <h3 class="font-serif text-xl font-bold mb-4 text-white" data-pl="Optymalizacja SEO" data-en="SEO Optimization">Optymalizacja SEO</h3>
+                        <p class="text-gray-300 mb-4" data-pl="Podstawowa optymalizacja SEO, aby Twoja strona była łatwo znajdowana w Google." data-en="Basic SEO optimization so your website is easily found on Google.">
+                            Podstawowa optymalizacja SEO, aby Twoja strona była łatwo znajdowana w Google.
+                        </p>
+                        <div class="text-white font-semibold" data-pl="Od 300 zł" data-en="From 300 PLN">Od 300 zł</div>
+                        <!-- Changed price color from cyan-400 to white -->
+                    </article>
+                    
+                    <article class="service-card bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-lg shadow-lg border border-gray-700 hover:border-gray-500 transition-all">
+                        <div class="text-white text-4xl mb-4">
+                            <i class="fas fa-tools"></i>
+                            <!-- Changed service icons from cyan-400 to white -->
+                        </div>
+                        <h3 class="font-serif text-xl font-bold mb-4 text-white" data-pl="Wsparcie Techniczne" data-en="Technical Support">Wsparcie Techniczne</h3>
+                        <p class="text-gray-300 mb-4" data-pl="Pomoc w utrzymaniu strony, aktualizacje i drobne modyfikacje." data-en="Help with website maintenance, updates and minor modifications.">
+                            Pomoc w utrzymaniu strony, aktualizacje i drobne modyfikacje.
+                        </p>
+                        <div class="text-white font-semibold" data-pl="100 zł/h" data-en="100 PLN/h">100 zł/h</div>
+                        <!-- Changed price color from cyan-400 to white -->
+                    </article>
+                    
+                    <article class="service-card bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-lg shadow-lg border border-gray-700 hover:border-gray-500 transition-all">
+                        <div class="text-white text-4xl mb-4">
+                            <i class="fas fa-rocket"></i>
+                            <!-- Changed service icons from cyan-400 to white -->
+                        </div>
+                        <h3 class="font-serif text-xl font-bold mb-4 text-white" data-pl="Szybka Realizacja" data-en="Fast Delivery">Szybka Realizacja</h3>
+                        <p class="text-gray-300 mb-4" data-pl="Większość projektów realizuję w ciągu 1-2 tygodni od akceptacji projektu." data-en="Most projects are completed within 1-2 weeks from project approval.">
+                            Większość projektów realizuję w ciągu 1-2 tygodni od akceptacji projektu.
+                        </p>
+                        <div class="text-white font-semibold" data-pl="Gwarancja terminowości" data-en="Timeliness guarantee">Gwarancja terminowości</div>
+                        <!-- Changed price color from cyan-400 to white -->
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-black">
+            <!-- Changed from bg-gray-900 to bg-black to match hero section depth -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <header class="text-center mb-16">
+                    <h2 class="font-serif text-4xl font-bold text-white mb-4" data-pl="Skontaktuj się ze mną" data-en="Get in Touch">
+                        Skontaktuj się ze mną
+                        <!-- Changed heading color from cyan-400 to white -->
+                    </h2>
+                    <p class="text-xl text-gray-300" data-pl="Masz pomysł na stronę internetową? Napisz do mnie, a omówimy szczegóły Twojego projektu." data-en="Do you have an idea for a website? Write to me and we'll discuss the details of your project.">
+                        Masz pomysł na stronę internetową? Napisz do mnie, a omówimy szczegóły Twojego projektu.
+                    </p>
+                </header>
+                
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="font-serif text-2xl font-bold text-white mb-6" data-pl="Wyślij wiadomość" data-en="Send a message">Wyślij wiadomość</h3>
+                        <!-- Changed subheading color from cyan-400 to white -->
+                        <form id="contact-form" class="space-y-6" onsubmit="handleContactForm(event)">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <input type="text" id="contact-name" placeholder="Imię i nazwisko" class="w-full px-4 py-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent bg-gray-800 text-white placeholder-gray-400" data-pl-placeholder="Imię i nazwisko" data-en-placeholder="Full name" required>
+                                    <!-- Changed focus ring color from cyan-400 to white -->
+                                </div>
+                                <div>
+                                    <input type="email" id="contact-email" placeholder="E-mail" class="w-full px-4 py-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent bg-gray-800 text-white placeholder-gray-400" data-pl-placeholder="E-mail" data-en-placeholder="Email" required>
+                                    <!-- Changed focus ring color from cyan-400 to white -->
+                                </div>
+                            </div>
+                            <div>
+                                <input type="text" id="contact-subject" placeholder="Temat" class="w-full px-4 py-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent bg-gray-800 text-white placeholder-gray-400" data-pl-placeholder="Temat" data-en-placeholder="Subject" required>
+                                <!-- Changed focus ring color from cyan-400 to white -->
+                            </div>
+                            <div>
+                                <textarea rows="6" id="contact-message" placeholder="Wiadomość" class="w-full px-4 py-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent bg-gray-800 text-white placeholder-gray-400" data-pl-placeholder="Opisz swój projekt..." data-en-placeholder="Describe your project..." required></textarea>
+                                <!-- Changed focus ring color from cyan-400 to white -->
+                            </div>
+                            <button type="submit" class="w-full bg-white hover:bg-gray-200 text-black font-semibold py-3 rounded-lg transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg" data-pl="Wyślij Wiadomość" data-en="Send Message">
+                                Wyślij Wiadomość
+                                <!-- Changed button to white background with black text -->
+                            </button>
+                        </form>
+                        
+                        <div id="contact-success" class="hidden mt-6 bg-gray-800 border border-gray-600 text-white px-6 py-4 rounded-lg text-center">
+                            <!-- Changed success message styling to monochrome -->
+                            <i class="fas fa-check-circle text-2xl mb-2"></i>
+                            <h4 class="font-semibold text-lg mb-2" data-pl="Wiadomość wysłana!" data-en="Message sent!">
+                                Wiadomość wysłana!
+                            </h4>
+                            <p data-pl="Dziękuję za wiadomość. Odpowiem najszybciej jak to możliwe!" data-en="Thank you for your message. I'll respond as soon as possible!">
+                                Dziękuję za wiadomość. Odpowiem najszybciej jak to możliwe!
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-serif text-2xl font-bold text-white mb-6" data-pl="Informacje kontaktowe" data-en="Contact Information">Informacje kontaktowe</h3>
+                        <!-- Changed subheading color from cyan-400 to white -->
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <i class="fas fa-envelope text-white w-6 mt-1"></i>
+                                <!-- Changed contact icons from cyan-400 to white -->
+                                <div class="ml-3">
+                                    <p class="font-semibold text-white" data-pl="E-mail" data-en="Email">E-mail</p>
+                                    <p class="text-gray-300">kontakt@erikcoding.pl</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-phone text-white w-6 mt-1"></i>
+                                <!-- Changed contact icons from cyan-400 to white -->
+                                <div class="ml-3">
+                                    <p class="font-semibold text-white" data-pl="Telefon" data-en="Phone">Telefon</p>
+                                    <p class="text-gray-300">+48 123 456 789</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fab fa-instagram text-white w-6 mt-1"></i>
+                                <!-- Changed contact icons from cyan-400 to white -->
+                                <div class="ml-3">
+                                    <p class="font-semibold text-white">Instagram</p>
+                                    <p class="text-gray-300">@erikcoding</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-clock text-white w-6 mt-1"></i>
+                                <!-- Changed contact icons from cyan-400 to white -->
+                                <div class="ml-3">
+                                    <p class="font-semibold text-white" data-pl="Czas odpowiedzi" data-en="Response time">Czas odpowiedzi</p>
+                                    <p class="text-gray-300" data-pl="Zazwyczaj do 24 godzin" data-en="Usually within 24 hours">Zazwyczaj do 24 godzin</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 p-6 bg-gray-800 rounded-lg border border-gray-700">
+                            <h4 class="font-semibold text-white mb-4" data-pl="Dlaczego warto ze mną współpracować?" data-en="Why work with me?">
+                                Dlaczego warto ze mną współpracować?
+                            </h4>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-white mr-2"></i>
+                                    <span data-pl="Przystępne ceny dla małych firm" data-en="Affordable prices for small businesses">Przystępne ceny dla małych firm</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-white mr-2"></i>
+                                    <span data-pl="Indywidualne podejście do każdego projektu" data-en="Individual approach to each project">Indywidualne podejście do każdego projektu</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-white mr-2"></i>
+                                    <span data-pl="Szybka komunikacja i realizacja" data-en="Fast communication and delivery">Szybka komunikacja i realizacja</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-white mr-2"></i>
+                                    <span data-pl="Wsparcie po zakończeniu projektu" data-en="Support after project completion">Wsparcie po zakończeniu projektu</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12 border-t border-gray-800">
+        <!-- Changed footer to black with cyan accents -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ErikCoding-LOGO-Black%26White%20copy-XBVsKF8qubj4Qapmy5dsNCSir3FWgq.png" alt="ErikCoding Logo" class="h-12 w-auto mb-4 filter invert">
+                    <p class="text-gray-400" data-pl="Młody freelancer tworzący nowoczesne strony internetowe dla małych firm." data-en="Young freelancer creating modern websites for small businesses.">
+                        Młody freelancer tworzący nowoczesne strony internetowe dla małych firm.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-white" data-pl="Usługi" data-en="Services">Usługi</h4>
+                    <!-- Changed footer heading color from cyan-400 to white -->
+                    <ul class="space-y-2 text-gray-400">
+                        <li data-pl="Strony wizytówkowe" data-en="Business websites">Strony wizytówkowe</li>
+                        <li data-pl="Sklepy online" data-en="Online stores">Sklepy online</li>
+                        <li data-pl="Responsywny design" data-en="Responsive design">Responsywny design</li>
+                        <li data-pl="Optymalizacja SEO" data-en="SEO optimization">Optymalizacja SEO</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-white" data-pl="Kontakt" data-en="Contact">Kontakt</h4>
+                    <!-- Changed footer heading color from cyan-400 to white -->
+                    <div class="space-y-2 text-gray-400">
+                        <p>kontakt@erikcoding.pl</p>
+                        <p>+48 123 456 789</p>
+                        <div class="flex space-x-4 mt-4">
+                            <a href="https://instagram.com/erikcoding" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                                <i class="fab fa-instagram text-xl"></i>
+                            </a>
+                            <a href="mailto:kontakt@erikcoding.pl" class="text-gray-400 hover:text-white transition-colors">
+                                <i class="fas fa-envelope text-xl"></i>
+                            </a>
+                            <a href="tel:+48123456789" class="text-gray-400 hover:text-white transition-colors">
+                                <i class="fas fa-phone text-xl"></i>
+                            </a>
+                            <!-- Changed social media hover colors from cyan-400 to white -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 ErikCoding. <span data-pl="Wszystkie prawa zastrzeżone." data-en="All rights reserved.">Wszystkie prawa zastrzeżone.</span></p>
+                <div class="mt-2 text-sm">
+                    <a href="admin.html" class="text-gray-400 hover:text-white transition-colors">Admin Panel</a>
+                    <!-- Changed admin link hover color from cyan-400 to white -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
